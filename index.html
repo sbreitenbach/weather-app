@@ -10,6 +10,11 @@
 <body>
     <h1>Weather Site</h1>
     <p>Hello World!</p>
+    <form onsubmit="myFunction(this.zipcode.value)">
+        <label for="zipcode">Your zip code:</label><br>
+        <input type="text" id="zipcode" name="zipcode"><br>
+        <input type="submit" value="Submit">
+    </form>
     <table>
         <tr>
             <th>Monday</th>
@@ -26,6 +31,12 @@
             <td>Partly Cloudy</td>
         </tr>
     </table>
+
+    <script>
+        function myFunction(zipcode) {
+            alert("Your zip code is " + zipcode);
+        }
+    </script>
 
 </body>
 
