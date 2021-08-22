@@ -1,5 +1,21 @@
 function myFunction(zipcode) {
     //alert("Your zip code is " + zipcode);
     var target = document.getElementById("weatherResults");
-    target.innerHTML += "<br>Your zip code is " + zipcode;
+    target.innerHTML += `
+    <table>
+        <tr>
+            <th>Monday</th>
+            <th>Tuseday</th>
+            <th>Wednesday</th>
+            <th>Thursday</th>
+            <th>Friday</th>
+        </tr>
+        <tr>
+            <td>Sunny</td>
+            <td>Cloudy</td>
+            <td>Sunny</td>
+            <td>Rainy</td>
+            <td>Partly Cloudy</td>
+        </tr>
+    </table>`;
 }
