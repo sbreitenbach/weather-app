@@ -1,4 +1,4 @@
-function get_geocode(zipcode) {
+async function get_geocode(zipcode) {
     var myHeaders = new Headers();
     myHeaders.append("Cookie", "JSESSIONID=061C62770675DB09C1B910E03608BA2F");
 
@@ -8,18 +8,13 @@ function get_geocode(zipcode) {
         redirect: 'follow'
     };
 
-    return fetch("http://www.mapquestapi.com/geocoding/v1/address?key=paBljA5O7dNn6iVSmZEQGDGQSfP0BWeK&location=" + zipcode, requestOptions)
-        .then((response) => {
-            response.json().then((data) => {
-                return data.results[0].locations[0].latLng;
-            }).catch((err) => {
-                console.log(err);
-            })
-        });
+    const response = await fetch("http://www.mapquestapi.com/geocoding/v1/address?key=paBljA5O7dNn6iVSmZEQGDGQSfP0BWeK&location=" + zipcode, requestOptions);
+    const json = await response.json();
+    return json.results[0].locations[0].latLng
 }
 
-function myFunction(zipcode) {
-    lat_long = get_geocode(zipcode)
+async function myFunction(zipcode) {
+    var lat_long = await get_geocode3(zipcode)
     console.log(lat_long);
     var target = document.getElementById("weatherResults");
     target.innerHTML += `
