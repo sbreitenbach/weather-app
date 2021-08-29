@@ -8,13 +8,13 @@ async function get_geocode(zipcode) {
         redirect: 'follow'
     };
 
-    const response = await fetch("http://www.mapquestapi.com/geocoding/v1/address?key=paBljA5O7dNn6iVSmZEQGDGQSfP0BWeK&location=" + zipcode, requestOptions);
+    const response = await fetch("https://www.mapquestapi.com/geocoding/v1/address?key=paBljA5O7dNn6iVSmZEQGDGQSfP0BWeK&location=" + zipcode, requestOptions);
     const json = await response.json();
     return json.results[0].locations[0].latLng
 }
 
 async function myFunction(zipcode) {
-    var lat_long = await get_geocode3(zipcode)
+    var lat_long = await get_geocode(zipcode)
     console.log(lat_long);
     var target = document.getElementById("weatherResults");
     target.innerHTML += `
