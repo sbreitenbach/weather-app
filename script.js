@@ -1,6 +1,5 @@
 async function get_geocode(zipcode) {
     var myHeaders = new Headers();
-    myHeaders.append("Cookie", "JSESSIONID=061C62770675DB09C1B910E03608BA2F");
 
     var requestOptions = {
         method: 'GET',
@@ -13,9 +12,33 @@ async function get_geocode(zipcode) {
     return json.results[0].locations[0].latLng
 }
 
+async function get_nws_grid(lat, lng) {
+    var myHeaders = new Headers();
+    myHeaders.append("User-Agent", "https://github.com/sbreitenbach/weather-app");
+
+
+    var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+    };
+
+    const response = await fetch("https://api.weather.gov/points/" + lat + "," + lng, requestOptions);
+    const json = await response.json();
+    //console.log(json.properties.gridId);
+    //console.log(json.properties.gridX);
+    //console.log(json.properties.gridY);
+    return [json.properties.gridId, json.properties.gridX, json.properties.gridY]
+}
+
+
 async function myFunction(zipcode) {
     var lat_long = await get_geocode(zipcode)
-    console.log(lat_long);
+    //console.log(lat_long);
+    //console.log(lat_long.lat);
+    //console.log(lat_long.lng);
+    var grid = await get_nws_grid(lat_long.lat, lat_long.lng)
+    console.log(grid);
     var target = document.getElementById("weatherResults");
     target.innerHTML += `
     <table>
