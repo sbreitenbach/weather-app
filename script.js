@@ -44,19 +44,67 @@ async function get_forcast(grid_id, grid_x, grid_y) {
     return json
 }
 
+function remove_extra_keys(objects){
+    //create new array
+    //for each obj in orig array
+    //copy select keys
+    //append to new array
+    //retrun new array
+}
+
+function CreateTableFromJSON(forecast) {
+    // https://www.encodedna.com/javascript/populate-json-data-to-html-table-using-javascript.htm
+    var col = [];
+    for (var i = 0; i < forecast.length; i++) {
+        for (var key in forecast[i]) {
+            if (col.indexOf(key) === -1) {
+                col.push(key);
+            }
+        }
+    }
+    // CREATE DYNAMIC TABLE.
+    var table = document.createElement("table");
+
+    // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
+
+    var tr = table.insertRow(-1);                   // TABLE ROW.
+
+    for (var i = 0; i < col.length; i++) {
+        var th = document.createElement("th");      // TABLE HEADER.
+        th.innerHTML = col[i];
+        tr.appendChild(th);
+    }
+
+    // ADD JSON DATA TO THE TABLE AS ROWS.
+    for (var i = 0; i < forecast.length; i++) {
+
+        tr = table.insertRow(-1);
+
+        for (var j = 0; j < col.length; j++) {
+            var tabCell = tr.insertCell(-1);
+            tabCell.innerHTML = forecast[i][col[j]];
+        }
+    }
+
+    // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
+    var divContainer = document.getElementById("weatherResults");
+    divContainer.innerHTML = "";
+    divContainer.appendChild(table);
+}
 
 async function myFunction(zipcode) {
     var lat_long = await get_geocode(zipcode)
     var grid = await get_nws_grid(lat_long.lat, lat_long.lng)
     var forcast = await get_forcast(grid[0], grid[1], grid[2])
-    console.log(forcast);
-    var target = document.getElementById("weatherResults");
+    //console.log(forcast.properties.periods);
+    periods = forcast.properties.periods
+    var target = document.getElementById("foo");
     target.innerHTML += `
     <table>
         <tr>
             <th>Monday</th>
             <th>Tuseday</th>
-            <th>Wednesday</th>
+            <th>Wednesday</th> 
             <th>Thursday</th>
             <th>Friday</th>
         </tr>
