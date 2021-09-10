@@ -1,3 +1,17 @@
+function is_valid_zip(zipcode) {
+    if (zipcode.length != 5) {
+        alert("Please enter a 5 digit zipcode")
+        return false
+    }
+    if (isNaN(zipcode)) {
+        alert("Please enter a numerical zipcode")
+        return false
+    }
+    else {
+        return true
+    }
+}
+
 async function get_geocode(zipcode) {
     var myHeaders = new Headers();
 
@@ -46,12 +60,13 @@ async function get_forcast(grid_id, grid_x, grid_y) {
 
 
 async function myFunction(zipcode) {
-    var lat_long = await get_geocode(zipcode)
-    var grid = await get_nws_grid(lat_long.lat, lat_long.lng)
-    var forcast = await get_forcast(grid[0], grid[1], grid[2])
-    console.log(forcast);
-    var target = document.getElementById("weatherResults");
-    target.innerHTML += `
+    if (is_valid_zip(zipcode)) {
+        var lat_long = await get_geocode(zipcode)
+        var grid = await get_nws_grid(lat_long.lat, lat_long.lng)
+        var forcast = await get_forcast(grid[0], grid[1], grid[2])
+        console.log(forcast);
+        var target = document.getElementById("weatherResults");
+        target.innerHTML += `
     <table>
         <tr>
             <th>Monday</th>
@@ -68,4 +83,5 @@ async function myFunction(zipcode) {
             <td>Partly Cloudy</td>
         </tr>
     </table>`;
+    }
 }
