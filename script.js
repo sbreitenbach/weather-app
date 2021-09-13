@@ -44,12 +44,18 @@ async function get_forcast(grid_id, grid_x, grid_y) {
     return json
 }
 
-function remove_extra_keys(objects){
-    //create new array
-    //for each obj in orig array
-    //copy select keys
-    //append to new array
-    //retrun new array
+function remove_extra_keys(objects) {
+    var new_array = [];
+    for (var i = 0; i < objects.length; i++) {
+        var new_obj = {};
+        for (var key in objects[i]) {
+            if (key == "name" || key == "shortForecast" || key == "temperature") {
+                new_obj[key] = objects[i][key];
+            }
+        }
+        new_array.push(new_obj);
+    }
+    return new_array
 }
 
 function CreateTableFromJSON(forecast) {
@@ -96,24 +102,9 @@ async function myFunction(zipcode) {
     var lat_long = await get_geocode(zipcode)
     var grid = await get_nws_grid(lat_long.lat, lat_long.lng)
     var forcast = await get_forcast(grid[0], grid[1], grid[2])
-    //console.log(forcast.properties.periods);
-    periods = forcast.properties.periods
-    var target = document.getElementById("foo");
-    target.innerHTML += `
-    <table>
-        <tr>
-            <th>Monday</th>
-            <th>Tuseday</th>
-            <th>Wednesday</th> 
-            <th>Thursday</th>
-            <th>Friday</th>
-        </tr>
-        <tr>
-            <td>Sunny</td>
-            <td>Cloudy</td>
-            <td>Sunny</td>
-            <td>Rainy</td>
-            <td>Partly Cloudy</td>
-        </tr>
-    </table>`;
+    periods = forcast.properties.periods;
+    console.log(periods)
+    periods = remove_extra_keys(periods);
+    console.log(periods);
+    CreateTableFromJSON(periods);
 }
