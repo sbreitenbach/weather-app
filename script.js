@@ -1,3 +1,17 @@
+function is_valid_zip(zipcode) {
+    if (zipcode.length != 5) {
+        alert("Please enter a 5 digit zipcode")
+        return false
+    }
+    if (isNaN(zipcode)) {
+        alert("Please enter a numerical zipcode")
+        return false
+    }
+    else {
+        return true
+    }
+}
+
 async function get_geocode(zipcode) {
     var myHeaders = new Headers();
 
@@ -99,6 +113,7 @@ function CreateTableFromJSON(forecast) {
 }
 
 async function myFunction(zipcode) {
+    if (is_valid_zip(zipcode)) {
     var lat_long = await get_geocode(zipcode)
     var grid = await get_nws_grid(lat_long.lat, lat_long.lng)
     var forcast = await get_forcast(grid[0], grid[1], grid[2])
@@ -107,4 +122,5 @@ async function myFunction(zipcode) {
     periods = remove_extra_keys(periods);
     console.log(periods);
     CreateTableFromJSON(periods);
+    }
 }
