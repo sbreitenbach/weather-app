@@ -77,11 +77,11 @@ function GenerateTable(weather) {
     }
 
     //Add the data rows.
-    for (var i = 1; i < weather.length; i++) {
+    for (var j = 1; j < weather.length; j++) {
         row = table.insertRow(-1);
-        for (var j = 0; j < columnCount; j++) {
+        for (var k = 0; k < columnCount; k++) {
             var cell = row.insertCell(-1);
-            cell.innerHTML = weather[i][j];
+            cell.innerHTML = weather[j][k];
         }
     }
 
@@ -95,17 +95,17 @@ function create_weater_array(objects) {
     var weather_array = [];
     weather_array.push(["Time", "Temperature", "Forcast", "Icon"]);
     for (var i = 0; i < objects.length; i++) {
-        period_array = [];
-        name = objects[i].name;
-        temp_degrees = objects[i].temperature;
-        temperature_unnit = objects[i].temperatureUnit;
-        temp = temp_degrees + "°" + temperature_unnit;
-        short_forecast = objects[i].shortForecast;
-        icon = objects[i].icon;
-        var img = document.createElement('img');
+        let period_array = [];
+        let time = objects[i].name;
+        let temp_degrees = objects[i].temperature;
+        let temperature_unnit = objects[i].temperatureUnit;
+        let temp = temp_degrees + "°" + temperature_unnit;
+        let short_forecast = objects[i].shortForecast;
+        let icon = objects[i].icon;
+        let img = document.createElement('img');
         img.src = icon;
         icon = img.outerHTML;
-        period_array.push(name, temp, short_forecast,icon);
+        period_array.push(time, temp, short_forecast,icon);
         weather_array.push(period_array);
     }
     return weather_array
