@@ -58,69 +58,66 @@ async function get_forcast(grid_id, grid_x, grid_y) {
     return json
 }
 
-function remove_extra_keys(objects) {
-    var new_array = [];
-    for (var i = 0; i < objects.length; i++) {
-        var new_obj = {};
-        for (var key in objects[i]) {
-            if (key == "name" || key == "shortForecast" || key == "temperature") {
-                new_obj[key] = objects[i][key];
-            }
-        }
-        new_array.push(new_obj);
+//https://www.aspsnippets.com/Articles/Create-dynamic-Table-in-HTML-at-runtime-using-JavaScript.aspx
+function GenerateTable(weather) {
+
+    //Create a HTML Table element.
+    var table = document.createElement("TABLE");
+    table.border = "1";
+
+    //Get the count of columns.
+    var columnCount = weather[0].length;
+
+    //Add the header row.
+    var row = table.insertRow(-1);
+    for (var i = 0; i < columnCount; i++) {
+        var headerCell = document.createElement("TH");
+        headerCell.innerHTML = weather[0][i];
+        row.appendChild(headerCell);
     }
-    return new_array
+
+    //Add the data rows.
+    for (var j = 1; j < weather.length; j++) {
+        row = table.insertRow(-1);
+        for (var k = 0; k < columnCount; k++) {
+            var cell = row.insertCell(-1);
+            cell.innerHTML = weather[j][k];
+        }
+    }
+
+    var dvTable = document.getElementById("weatherResults");
+    dvTable.innerHTML = "";
+    dvTable.appendChild(table);
 }
 
-function CreateTableFromJSON(forecast) {
-    // https://www.encodedna.com/javascript/populate-json-data-to-html-table-using-javascript.htm
-    var col = [];
-    for (var i = 0; i < forecast.length; i++) {
-        for (var key in forecast[i]) {
-            if (col.indexOf(key) === -1) {
-                col.push(key);
-            }
-        }
+
+function create_weater_array(objects) {
+    var weather_array = [];
+    weather_array.push(["Time", "Temperature", "Forcast", "Icon"]);
+    for (var i = 0; i < objects.length; i++) {
+        let period_array = [];
+        let time = objects[i].name;
+        let temp_degrees = objects[i].temperature;
+        let temperature_unnit = objects[i].temperatureUnit;
+        let temp = temp_degrees + "°" + temperature_unnit;
+        let short_forecast = objects[i].shortForecast;
+        let icon = objects[i].icon;
+        let img = document.createElement('img');
+        img.src = icon;
+        icon = img.outerHTML;
+        period_array.push(time, temp, short_forecast,icon);
+        weather_array.push(period_array);
     }
-    // CREATE DYNAMIC TABLE.
-    var table = document.createElement("table");
-
-    // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
-
-    var tr = table.insertRow(-1);                   // TABLE ROW.
-
-    for (var i = 0; i < col.length; i++) {
-        var th = document.createElement("th");      // TABLE HEADER.
-        th.innerHTML = col[i];
-        tr.appendChild(th);
-    }
-
-    // ADD JSON DATA TO THE TABLE AS ROWS.
-    for (var i = 0; i < forecast.length; i++) {
-
-        tr = table.insertRow(-1);
-
-        for (var j = 0; j < col.length; j++) {
-            var tabCell = tr.insertCell(-1);
-            tabCell.innerHTML = forecast[i][col[j]];
-        }
-    }
-
-    // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
-    var divContainer = document.getElementById("weatherResults");
-    divContainer.innerHTML = "";
-    divContainer.appendChild(table);
+    return weather_array
 }
 
 async function myFunction(zipcode) {
     if (is_valid_zip(zipcode)) {
-    var lat_long = await get_geocode(zipcode)
-    var grid = await get_nws_grid(lat_long.lat, lat_long.lng)
-    var forcast = await get_forcast(grid[0], grid[1], grid[2])
-    periods = forcast.properties.periods;
-    console.log(periods)
-    periods = remove_extra_keys(periods);
-    console.log(periods);
-    CreateTableFromJSON(periods);
+        var lat_long = await get_geocode(zipcode)
+        var grid = await get_nws_grid(lat_long.lat, lat_long.lng)
+        var forcast = await get_forcast(grid[0], grid[1], grid[2])
+        periods = forcast.properties.periods;
+        var weather = create_weater_array(periods)
+        GenerateTable(weather);
     }
 }
