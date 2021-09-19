@@ -93,15 +93,19 @@ function GenerateTable(weather) {
 
 function create_weater_array(objects) {
     var weather_array = [];
-    weather_array.push(["Time", "Temperature", "Forcast"]);
+    weather_array.push(["Time", "Temperature", "Forcast", "Icon"]);
     for (var i = 0; i < objects.length; i++) {
         period_array = [];
         name = objects[i].name;
-        temp = objects[i].temperature;
+        temp_degrees = objects[i].temperature;
+        temperature_unnit = objects[i].temperatureUnit;
+        temp = temp_degrees + "°" + temperature_unnit;
         short_forecast = objects[i].shortForecast;
-        //TODO add icon to forecast
-        //TODO add temp unit
-        period_array.push(name, temp, short_forecast);
+        icon = objects[i].icon;
+        var img = document.createElement('img');
+        img.src = icon;
+        icon = img.outerHTML;
+        period_array.push(name, temp, short_forecast,icon);
         weather_array.push(period_array);
     }
     return weather_array
