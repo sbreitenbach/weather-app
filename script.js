@@ -111,8 +111,16 @@ function create_weater_array(objects) {
     return weather_array
 }
 
+// https://stackoverflow.com/questions/53799108/how-to-add-a-loading-animation-while-fetch-data-from-api-vanilla-js
 async function myFunction(zipcode) {
     if (is_valid_zip(zipcode)) {
+        let loader = `<div class="sk-folding-cube">
+        <div class="sk-cube1 sk-cube"></div>
+        <div class="sk-cube2 sk-cube"></div>
+        <div class="sk-cube4 sk-cube"></div>
+        <div class="sk-cube3 sk-cube"></div>
+      </div>`;
+        document.getElementById('weatherResults').innerHTML = loader;
         var lat_long = await get_geocode(zipcode)
         var grid = await get_nws_grid(lat_long.lat, lat_long.lng)
         var forcast = await get_forcast(grid[0], grid[1], grid[2])
