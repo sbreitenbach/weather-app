@@ -114,6 +114,7 @@ function create_weater_array(objects) {
 // https://stackoverflow.com/questions/53799108/how-to-add-a-loading-animation-while-fetch-data-from-api-vanilla-js
 async function myFunction(zipcode) {
     if (is_valid_zip(zipcode)) {
+        //https://tobiasahlin.com/spinkit/
         let loader = `<div class="sk-folding-cube">
         <div class="sk-cube1 sk-cube"></div>
         <div class="sk-cube2 sk-cube"></div>
